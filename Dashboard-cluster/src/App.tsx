@@ -828,7 +828,7 @@ const App: React.FC = () => {
   const fetchData = async (): Promise<void> => {
     try {
       setError('');
-      const response = await fetch('solana-cluster-dashboard-production.up.railway.app/clusters');
+      const response = await fetch('/solana-cluster-dashboard-production.up.railway.app/clusters');
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
