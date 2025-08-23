@@ -821,7 +821,7 @@ interface ApiResponse {
 const App: React.FC = () => {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [lastUpdate, setLastUpdate] = useState<string>('');
+ 
   const [error, setError] = useState<string>('');
   const [selectedRecipients, setSelectedRecipients] = useState<string[] | null>(null);
 
@@ -836,7 +836,7 @@ const App: React.FC = () => {
       
       const result: ApiResponse = await response.json();
       setData(result);
-      setLastUpdate(new Date().toLocaleTimeString());
+    
       setLoading(false);
     } catch (error: any) {
       console.error('Error fetching clusters:', error);
