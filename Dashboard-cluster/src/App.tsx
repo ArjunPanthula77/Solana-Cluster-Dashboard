@@ -180,7 +180,7 @@
 // //   const fetchData = async (): Promise<void> => {
 // //     try {
 // //       setError('');
-// //       const response = await fetch('http://localhost:3001/clusters');
+// //       const response = await fetch('solana-cluster-dashboard.railway.internalclusters');
       
 // //       if (!response.ok) {
 // //         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -493,7 +493,7 @@
 //   const fetchData = async (): Promise<void> => {
 //     try {
 //       setError('');
-//       const response = await fetch('http://localhost:3001/clusters');
+//       const response = await fetch('solana-cluster-dashboard.railway.internalclusters');
       
 //       if (!response.ok) {
 //         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -828,7 +828,7 @@ const App: React.FC = () => {
   const fetchData = async (): Promise<void> => {
     try {
       setError('');
-      const response = await fetch('http://localhost:3001/clusters');
+      const response = await fetch('solana-cluster-dashboard-production.up.railway.app/clusters');
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
