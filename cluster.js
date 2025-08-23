@@ -483,7 +483,7 @@
 // };
 
 // cluster.js
-const { PublicKey, Connection } = require('./Solana-Cluster-Dashboard/node_modules/@solana/web3.js/lib/index.js');
+const { PublicKey, Connection } = require('@solana/web3.js');
 const { 
   WINDOW_MS, 
   MIN_CHILDREN, 
