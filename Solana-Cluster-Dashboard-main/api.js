@@ -10,6 +10,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
 const pool = new Pool({
   connectionString: "postgresql://opsonchain_user:pCHPUTUW5w79pGWvrWOPEKLauLKMwuwB@dpg-d3ao36f5r7bs73d7abm0-a.frankfurt-postgres.render.com/opsonchain",
+  ssl: {
+    rejectUnauthorized: false, // allow self-signed certs
+  },
 });
 
 // 🔹 Initialize DB tables if not exist
