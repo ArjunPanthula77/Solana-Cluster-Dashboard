@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key";
 
 const pool = new Pool({
-  connectionString: "DATABASE_URL=postgresql://just_for_example_user:Mp5tmt8AeI3n9Ab37IMvUEQKtTrwjiq8@dpg-d396r90dl3ps73almb80-a.oregon-postgres.render.com/just_for_example",
+  connectionString: "postgresql://opsonchain_user:pCHPUTUW5w79pGWvrWOPEKLauLKMwuwB@dpg-d3ao36f5r7bs73d7abm0-a.frankfurt-postgres.render.com/opsonchain",
 });
 
 // 🔹 Initialize DB tables if not exist
