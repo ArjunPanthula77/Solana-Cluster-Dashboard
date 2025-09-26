@@ -32,7 +32,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
 
   // 🔹 Check session on mount
   useEffect(() => {
-    fetch("https://solana-cluster-monitor-1.onrender.com/me", { credentials: "include" })
+    fetch("solana-cluster.up.railway.app/me", { credentials: "include" })
       .then((res) => {
         const loggedIn = res.ok
         setIsLoggedIn(loggedIn)
@@ -45,7 +45,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
   }, [setIsLoggedInState])
 
   const handleLogout = async () => {
-    await fetch("https://solana-cluster-monitor-1.onrender.com/logout", {
+    await fetch("solana-cluster.up.railway.app/logout", {
       method: "POST",
       credentials: "include"
     })
@@ -88,7 +88,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
       return
     }
     try {
-      const res = await fetch("https://solana-cluster-monitor-1.onrender.com/signup", {
+      const res = await fetch("solana-cluster.up.railway.app/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -120,7 +120,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
       return
     }
     try {
-      const res = await fetch("https://solana-cluster-monitor-1.onrender.com/login", {
+      const res = await fetch("solana-cluster.up.railway.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
