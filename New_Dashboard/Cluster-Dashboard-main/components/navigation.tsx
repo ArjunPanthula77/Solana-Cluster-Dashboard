@@ -300,21 +300,30 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
     }
   }, [])
 
-  // 🔹 Check session only on initial mount, not on every navigation
+  // 🔹 Check session on mount using localStorage first
   useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const res = await fetch("https://solana-cluster.up.railway.app/me", { credentials: "include" })
-        const loggedIn = res.ok
-        setIsLoggedIn(loggedIn)
-        setIsLoggedInState(loggedIn)
-      } catch {
-        setIsLoggedIn(false)
-        setIsLoggedInState(false)
+    const storedIsLoggedIn = localStorage.getItem("isLoggedIn")
+    if (storedIsLoggedIn === "true") {
+      setIsLoggedIn(true)
+      setIsLoggedInState(true)
+    } else {
+      // Fallback to API check if no localStorage data
+      const checkSession = async () => {
+        try {
+          const res = await fetch("https://solana-cluster.up.railway.app/me", { credentials: "include" })
+          const loggedIn = res.ok
+          setIsLoggedIn(loggedIn)
+          setIsLoggedInState(loggedIn)
+          if (loggedIn) {
+            localStorage.setItem("isLoggedIn", "true")
+          }
+        } catch {
+          setIsLoggedIn(false)
+          setIsLoggedInState(false)
+        }
       }
+      checkSession()
     }
-    checkSession()
-    // Empty dependency array ensures this runs only once on mount
   }, [setIsLoggedInState])
 
   const handleLogout = async () => {
@@ -324,6 +333,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
     })
     setIsLoggedIn(false)
     setIsLoggedInState(false)
+    localStorage.removeItem("isLoggedIn") // Clear localStorage on logout
     setMode(null)
     router.push("/")
   }
@@ -371,6 +381,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
         setMessage(`✅ Signed up as ${data.user.email || data.user.solana_address}`)
         setIsLoggedIn(true)
         setIsLoggedInState(true)
+        localStorage.setItem("isLoggedIn", "true") // Save login state
         setMode(null)
       } else {
         setMessage(`❌ ${data.error}`)
@@ -403,6 +414,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
         setMessage(`✅ Logged in as ${data.user.email || data.user.solana_address}`)
         setIsLoggedIn(true)
         setIsLoggedInState(true)
+        localStorage.setItem("isLoggedIn", "true") // Save login state
         setMode(null)
       } else {
         setMessage(`❌ ${data.error}`)
@@ -415,7 +427,6 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
   // 🔹 Handle Home Click to close forms and navigate
   const handleHomeClick = () => {
     setMode(null) // Close signup/login form
-    // Avoid triggering session check on navigation
   }
 
   const navItems = [
@@ -543,6 +554,9 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
           </Button>
         </div>
       )}
+    </>
+  )
+}
     </>
   )
 }
