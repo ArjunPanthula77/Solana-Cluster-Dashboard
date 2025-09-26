@@ -38,12 +38,12 @@ function startApi(port = 3001, startPolling, stopPolling) {
 
   const app = express();
   
-const allowedOrigin = "https://www.opsonchain.com"; // your frontend URL
+  const allowedOrigin = "https://www.opsonchain.com"; // your frontend URL
 
-app.use(cors({
-  origin: allowedOrigin, // cannot be '*'
-  credentials: true,     // allows cookies to be sent
-}));
+  app.use(cors({
+    origin: allowedOrigin, // cannot be '*'
+    credentials: true,     // allows cookies to be sent
+  }));
 
   app.use(express.json());
   app.use(cookieParser());
@@ -223,8 +223,8 @@ app.use(cors({
     });
   });
 
-  const server = app.listen(port, () => {
-    console.log(`🌐 API server listening on port ${port}`);
+  const server = app.listen(process.env.PORT || port, () => {
+    console.log(`🌐 API server listening on port ${process.env.PORT || port}`);
     console.log(`📋 Endpoints available:`);
     console.log(`   POST /signup    - Register user`);
     console.log(`   POST /login     - Login user`);
