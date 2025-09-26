@@ -38,7 +38,7 @@ function startApi(port = 3001, startPolling, stopPolling) {
 
   const app = express();
   
-const allowedOrigin = "https://www.opsonchain.com/"; // your frontend URL
+const allowedOrigin = "https://www.opsonchain.com"; // your frontend URL
 
 app.use(cors({
   origin: allowedOrigin, // cannot be '*'
