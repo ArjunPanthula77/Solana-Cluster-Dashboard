@@ -120,7 +120,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState: (isLogg
       return
     }
     try {
-      const res = await fetch("https://solana-cluster.up.railway.app//login", {
+      const res = await fetch("https://solana-cluster.up.railway.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
