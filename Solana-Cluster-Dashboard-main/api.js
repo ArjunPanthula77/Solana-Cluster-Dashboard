@@ -302,10 +302,20 @@ function startApi(port = 3001, startPolling, stopPolling) {
   
 //const allowedOrigin = "http://localhost:3000"; // your frontend URL
 
-app.use(cors({
-  origin: "*",   // allow everything
-  credentials: true
+// app.use(cors({
+//   origin: "*",   // allow everything
+//   credentials: true
+// }));
+
+
+  app.use(cors({
+  origin: (origin, callback) => {
+    // Allow all origins, including undefined (e.g., curl or server requests)
+    callback(null, true);
+  },
+  credentials: true  // Allows cookies to be sent
 }));
+
 
 
   app.use(express.json());
