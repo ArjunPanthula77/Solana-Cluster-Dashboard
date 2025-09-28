@@ -205,7 +205,10 @@ function startApi(port = 3001, startPolling, stopPolling) {
       res.json({ message: 'Polling stopped successfully' });
     } catch (error) {
       console.error('❌ Error stopping polling:', error.message);
-      res.status(500).json({ error: 'Internal server error', message: error.message });
+      res.status(500).json({ 
+        error: 'Internal server error', 
+        message: error.message 
+      });
     }
   });
 
