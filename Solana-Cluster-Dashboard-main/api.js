@@ -515,7 +515,7 @@ function startApi(port = 3001, startPolling, stopPolling) {
   // });
 
 
-  const PORT = process.env.PORT || 8080;
+  const PORT = 8080;
 
 const server = app.listen(PORT, () => {
   console.log(`🌐 API server listening on port ${PORT}`);
