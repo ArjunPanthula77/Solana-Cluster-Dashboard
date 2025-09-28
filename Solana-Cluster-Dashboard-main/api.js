@@ -38,12 +38,36 @@ function startApi(port = 3001, startPolling, stopPolling) {
 
   const app = express();
   
-  const allowedOrigin = "https://www.opsonchain.com"; // your frontend URL
+  // const allowedOrigin = "https://www.opsonchain.com"; // your frontend URL
+
+  // app.use(cors({
+  //   origin: allowedOrigin, // cannot be '*'
+  //   credentials: true,     // allows cookies to be sent
+  // }));
+
 
   app.use(cors({
-    origin: allowedOrigin, // cannot be '*'
-    credentials: true,     // allows cookies to be sent
-  }));
+  origin: function (origin, callback) {
+    // Allow requests with no origin (e.g., curl or direct API tests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'https://www.opsonchain.com',
+      'https://opsonchain.com',
+      'http://localhost:3000',  // Add your local dev port; adjust if Next.js is on a different port
+      'http://127.0.0.1:3000'  // Sometimes localhost resolves differently
+    ];
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true  // Keeps cookie support
+}));
+
+  
 
   app.use(express.json());
   app.use(cookieParser());
