@@ -40,7 +40,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       // Fallback to API check if no localStorage data
       const checkSession = async () => {
         try {
-          const res = await fetch("https://solana-cluster.up.railway.app/me", { credentials: "include" })
+          const res = await fetch("https://solana-cluster-dashboard-production.up.railway.app/me", { credentials: "include" })
           const loggedIn = res.ok
           setIsLoggedIn(loggedIn)
           if (setIsLoggedInState) setIsLoggedInState(loggedIn) // Only call if prop exists
@@ -60,7 +60,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
   }, [setIsLoggedInState])
 
   const handleLogout = async () => {
-    await fetch("https://solana-cluster.up.railway.app/logout", {
+    await fetch("https://solana-cluster-dashboard-production.up.railway.app/logout", {
       method: "POST",
       credentials: "include"
     })
@@ -103,7 +103,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       return
     }
     try {
-      const res = await fetch("https://solana-cluster.up.railway.app/signup", {
+      const res = await fetch("https://solana-cluster-dashboard-production.up.railway.app/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -136,7 +136,7 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       return
     }
     try {
-      const res = await fetch("https://solana-cluster.up.railway.app/login", {
+      const res = await fetch("https://solana-cluster-dashboard-production.up.railway.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
