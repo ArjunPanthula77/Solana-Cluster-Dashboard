@@ -44,7 +44,17 @@ export default function HomePage() {
             Solana blockchain monitoring.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* <Link href="/dashboard" onClick={handleDashboardClick}>
+         <Link href="/dashboard" onClick={handleDashboardClick}>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/25 transition-all duration-300"
+              >
+                <BarChart3 className="mr-2 h-5 w-5" />
+                View Dashboard
+              </Button>
+            </Link> 
+
+            {/* <Link href="/d" onClick={handleDashboardClick}>
               <Button
                 size="lg"
                 className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/25 transition-all duration-300"
@@ -53,16 +63,6 @@ export default function HomePage() {
                 View Dashboard
               </Button>
             </Link> */}
-
-            <Link href="/d" onClick={handleDashboardClick}>
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-primary/25 transition-all duration-300"
-              >
-                <BarChart3 className="mr-2 h-5 w-5" />
-                View Dashboard
-              </Button>
-            </Link>
 
             
             <Button
