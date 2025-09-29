@@ -69,7 +69,7 @@ export function ClusterDashboard() {
   const [minChildrenFilter, setMinChildrenFilter] = useState<string>("")
   const { toast } = useToast()
 
-  const API_BASE = "https://solana-cluster-dashboard-production.up.railway.app"
+  const API_BASE = "https://solana-cluster-dashboard-production-cce9.up.railway.app"
 
   const fetchData = async () => {
     try {
