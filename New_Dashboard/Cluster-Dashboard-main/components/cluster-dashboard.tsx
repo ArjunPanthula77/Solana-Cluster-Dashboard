@@ -2316,7 +2316,6 @@
 //   )
 // }
 
-
 "use client"
 
 import { useEffect, useState } from "react"
@@ -2775,9 +2774,9 @@ export function ClusterDashboard() {
       </div>
 
       <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
-        <DialogContent className="bg-card rounded-lg p-5 max-w-6xl w-full max-h-[90vh] overflow-hidden shadow-lg">
+        <DialogContent className="bg-card rounded-lg p-6 max-w-7xl w-full h-[85vh] overflow-hidden shadow-lg">
           {selectedCluster && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
               {/* Funding Overview */}
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-2">Funding Overview</h3>
@@ -2860,10 +2859,10 @@ export function ClusterDashboard() {
                 </div>
               </div>
 
-              {/* Child Wallets Activity */}
-              <div className="bg-background p-4 rounded-lg shadow">
+              {/* All Child Wallets */}
+              <div className="bg-background p-4 rounded-lg shadow row-span-2">
                 <h3 className="text-lg font-semibold mb-2">All Child Wallets</h3>
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-[200px] overflow-y-auto">
                   {selectedCluster.recipients.map((address, idx) => (
                     <div key={idx} className="flex justify-between items-center border-b pb-2 last:border-b-0">
                       <span className="flex-1 mr-4">{address.slice(0, 4)}...{address.slice(-3)}</span>
@@ -2894,7 +2893,7 @@ export function ClusterDashboard() {
 
               <Button
                 onClick={() => setSelectedCluster(null)}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded text-base block mx-auto mt-4 col-span-3"
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded text-base block mx-auto mt-4 col-span-full"
               >
                 Close
               </Button>
