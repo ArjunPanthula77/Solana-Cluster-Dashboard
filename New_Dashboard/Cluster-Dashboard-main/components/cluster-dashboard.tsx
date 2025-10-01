@@ -2773,131 +2773,185 @@ export function ClusterDashboard() {
           </TableBody>
         </Table>
       </div>
-
-      <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
-        <DialogContent className="bg-card rounded-lg p-6 max-w-8xl w-full h-[90vh] overflow-hidden shadow-lg">
+<Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
+        <DialogContent className="bg-card rounded-lg p-6 max-w-5xl w-full max-h-[85vh] overflow-y-auto shadow-lg">
           {selectedCluster && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-              {/* Funding Overview */}
-              <div className="bg-background p-4 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">Funding Overview</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Total SOL Funded</span>
-                    <span className="font-bold">{selectedCluster.total_sol_funded.toFixed(1)} SOL</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>SOL Spent</span>
-                    <span className="font-bold">
-                      {(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>SOL Remaining</span>
-                    <span className="font-bold">{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span>
-                  </div>
-                  <Progress
-                    value={((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100}
-                    className="w-full h-2"
-                  />
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>
-                      {Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete
-                    </span>
-                    <span>Est. {formatTimeRemaining(selectedCluster.time_remaining_sec)} remaining</span>
-                  </div>
-                </div>
-              </div>
+            <div className="space-y-4">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-bold">Cluster Details</DialogTitle>
+              </DialogHeader>
 
-              {/* Health Score */}
-              <div className="bg-background p-4 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">Health Score</h3>
-                <div className="flex flex-col items-center">
-                  <div className="relative w-24 h-24">
-                    <div className="absolute inset-0 rounded-full bg-gray-200"></div>
-                    <div
-                      className="absolute inset-0 rounded-full"
-                      style={{
-                        background: `conic-gradient(#22c55e 0deg, #22c55e ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb 360deg)`,
-                      }}
-                    ></div>
-                    <div className="absolute inset-3 rounded-full bg-background flex items-center justify-center"></div>
-                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 font-bold text-2xl">
-                      {calculateHealthScore(selectedCluster)}
-                    </span>
-                  </div>
-                  <span className="text-sm text-muted-foreground mt-2">{getHealthLabel(calculateHealthScore(selectedCluster))}</span>
-                </div>
-              </div>
-
-              {/* Metrics (Spend Rate and Time Remaining) */}
-              <div className="bg-background p-4 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">Metrics</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Spend Rate</span>
-                    <span className="font-bold">{selectedCluster.spend_rate_sol_per_min?.toFixed(2) ?? "N/A"} SOL/min</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Time Remaining</span>
-                    <span className="font-bold">{formatTimeRemaining(selectedCluster.time_remaining_sec)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Token Details (Token Mints and DEX Programs) */}
-              <div className="bg-background p-4 rounded-lg shadow">
-                <h3 className="text-lg font-semibold mb-2">Token Details</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>Token Mints</span>
-                    <span className="font-bold">{selectedCluster.token_mints.join(", ") || "None"}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>DEX Programs</span>
-                    <span className="font-bold">{selectedCluster.common_patterns.dex_programs.join(", ") || "None"}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* All Child Wallets */}
-              <div className="bg-background p-4 rounded-lg shadow lg:col-span-1">
-                <h3 className="text-lg font-semibold mb-2">All Child Wallets</h3>
-                <div className="space-y-2 max-h-[250px] overflow-y-auto">
-                  {selectedCluster.recipients.map((address, idx) => (
-                    <div key={idx} className="flex justify-between items-center border-b pb-2 last:border-b-0">
-                      <span className="flex-1 mr-4">{address.slice(0, 4)}...{address.slice(-3)}</span>
-                      <Button
-                        size="sm"
-                        onClick={() => copyToClipboard(address)}
-                        className="bg-green-500 text-white hover:bg-green-600 px-2 py-1 rounded text-xs transition-colors"
-                      >
-                        Copy
-                      </Button>
+              {/* Top Row: Funding Overview and Health Score */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Funding Overview */}
+                <div className="bg-background p-5 rounded-lg shadow border border-border">
+                  <h3 className="text-base font-semibold mb-4 text-foreground">Funding Overview</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Total SOL Funded</span>
+                      <span className="text-lg font-bold text-foreground">{selectedCluster.total_sol_funded.toFixed(1)} SOL</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Transaction Timeline */}
-              <div className="bg-background p-4 rounded-lg shadow lg:col-span-2">
-                <h3 className="text-lg font-semibold mb-2">Transaction Timeline</h3>
-                <div className="space-y-2">
-                  {getTransactionTimeline(selectedCluster.buy_slots).map((tx, idx) => (
-                    <div key={idx} className="flex justify-between">
-                      <span>Buy {tx.amount} {tx.token}</span>
-                      <span className="text-sm text-muted-foreground">{tx.time}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">SOL Spent</span>
+                      <span className="text-lg font-bold text-foreground">
+                        {(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL
+                      </span>
                     </div>
-                  ))}
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">SOL Remaining</span>
+                      <span className="text-lg font-bold text-green-500">{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span>
+                    </div>
+                    <div className="mt-4">
+                      <Progress
+                        value={((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100}
+                        className="w-full h-3"
+                      />
+                      <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+                        <span>
+                          {Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete
+                        </span>
+                        <span>Est. {formatTimeRemaining(selectedCluster.time_remaining_sec)} remaining</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Health Score */}
+                <div className="bg-background p-5 rounded-lg shadow border border-border">
+                  <h3 className="text-base font-semibold mb-4 text-foreground">Health Score</h3>
+                  <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
+                    <div className="relative w-32 h-32">
+                      <svg className="w-full h-full transform -rotate-90">
+                        <circle
+                          cx="64"
+                          cy="64"
+                          r="56"
+                          stroke="currentColor"
+                          strokeWidth="12"
+                          fill="none"
+                          className="text-muted"
+                        />
+                        <circle
+                          cx="64"
+                          cy="64"
+                          r="56"
+                          stroke="currentColor"
+                          strokeWidth="12"
+                          fill="none"
+                          strokeDasharray={`${(calculateHealthScore(selectedCluster) / 100) * 351.86} 351.86`}
+                          className="text-green-500 transition-all duration-500"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-4xl font-bold text-foreground">{calculateHealthScore(selectedCluster)}</span>
+                      </div>
+                    </div>
+                    <span className="text-sm text-muted-foreground mt-3">{getHealthLabel(calculateHealthScore(selectedCluster))}</span>
+                  </div>
                 </div>
               </div>
 
-              <Button
-                onClick={() => setSelectedCluster(null)}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded text-base block mx-auto mt-4 col-span-full"
-              >
-                Close
-              </Button>
+              {/* Middle Row: Quick Stats */}
+              <div className="bg-background p-5 rounded-lg shadow border border-border">
+                <h3 className="text-base font-semibold mb-4 text-foreground">Quick Stats</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Active Wallets</p>
+                    <p className="text-lg font-bold text-foreground">{selectedCluster.children_count} / {selectedCluster.recipients.length}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Spend Rate</p>
+                    <p className="text-lg font-bold text-foreground">{selectedCluster.spend_rate_sol_per_min?.toFixed(2) ?? "N/A"} SOL/min</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">DEX Used</p>
+                    <p className="text-lg font-bold text-foreground">{selectedCluster.common_patterns.dex_programs[0] || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Time Remaining</p>
+                    <p className="text-lg font-bold text-foreground">{formatTimeRemaining(selectedCluster.time_remaining_sec)}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Row: Child Wallets and Token Details */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Child Wallets Activity */}
+                <div className="bg-background p-5 rounded-lg shadow border border-border">
+                  <h3 className="text-base font-semibold mb-4 text-foreground">Child Wallets Activity</h3>
+                  <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                    {selectedCluster.recipients.slice(0, 10).map((address, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-3 bg-muted/30 rounded border border-border">
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
+                            {idx + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-mono text-foreground truncate">{address.slice(0, 8)}...{address.slice(-6)}</p>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={() => copyToClipboard(address)}
+                          className="bg-green-500 text-white hover:bg-green-600 px-3 py-1 rounded text-xs ml-2"
+                        >
+                          Copy
+                        </Button>
+                      </div>
+                    ))}
+                    {selectedCluster.recipients.length > 10 && (
+                      <p className="text-center text-xs text-muted-foreground mt-2">
+                        +{selectedCluster.recipients.length - 10} more wallets
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Token Details */}
+                <div className="bg-background p-5 rounded-lg shadow border border-border">
+                  <h3 className="text-base font-semibold mb-4 text-foreground">Token Details</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">Token Mints</p>
+                      <div className="space-y-2">
+                        {selectedCluster.token_mints.length > 0 ? (
+                          selectedCluster.token_mints.map((mint, idx) => (
+                            <div key={idx} className="p-2 bg-muted/30 rounded border border-border">
+                              <p className="text-sm font-mono text-foreground truncate">{mint}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-muted-foreground">No token mints</p>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-2">DEX Programs</p>
+                      <div className="space-y-2">
+                        {selectedCluster.common_patterns.dex_programs.length > 0 ? (
+                          selectedCluster.common_patterns.dex_programs.map((dex, idx) => (
+                            <div key={idx} className="p-2 bg-muted/30 rounded border border-border">
+                              <p className="text-sm font-semibold text-foreground">{dex}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-muted-foreground">No DEX programs</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-center pt-4">
+                <Button
+                  onClick={() => setSelectedCluster(null)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-6 py-2 rounded"
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>
