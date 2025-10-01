@@ -3159,97 +3159,94 @@ export function ClusterDashboard() {
 
       {/* Updated Detail Modal */}
       <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
-  <DialogContent className="bg-card rounded-lg p-6 max-w-6xl w-full h-[90vh] overflow-y-auto shadow-lg">
-    {selectedCluster && (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Funding Overview */}
-        <div className="bg-background p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-3">Funding Overview</h3>
-          <div className="space-y-2">
-            <div className="flex justify-between"><span>Total SOL Funded</span><span>{selectedCluster.total_sol_funded.toFixed(1)} SOL</span></div>
-            <div className="flex justify-between"><span>SOL Remaining</span><span>{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span></div>
-            <div className="flex justify-between"><span>SOL Spent</span><span>{(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL</span></div>
-            <div className="flex justify-between"><span>Spend Rate</span><span>{selectedCluster.spend_rate_sol_per_min ? selectedCluster.spend_rate_sol_per_min.toFixed(2) : "N/A"} SOL/min</span></div>
-            <Progress
-              value={((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100}
-              className="w-full h-2"
-            />
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <span>{Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete</span>
-              <span>Est. {formatTimeRemaining(selectedCluster.time_remaining_sec)}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Health Score */}
-        <div className="bg-background p-4 rounded-lg shadow flex flex-col items-center justify-center">
-          <h3 className="text-lg font-semibold mb-3">Health Score</h3>
-          <div className="relative w-28 h-28">
-            <div className="absolute inset-0 rounded-full bg-gray-200"></div>
-            <div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: `conic-gradient(#22c55e 0deg, #22c55e ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb 360deg)`,
-              }}
-            ></div>
-            <div className="absolute inset-3 rounded-full bg-background flex items-center justify-center">
-              <span className="font-bold text-2xl">{calculateHealthScore(selectedCluster)}</span>
-            </div>
-          </div>
-          <span className="mt-2 text-sm text-muted-foreground">{getHealthLabel(calculateHealthScore(selectedCluster))}</span>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="bg-background p-4 rounded-lg shadow">
-          <h3 className="text-lg font-semibold mb-3">Quick Stats</h3>
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between"><span>Active Wallets</span><span>{selectedCluster.children_count}/10</span></div>
-            <div className="flex justify-between"><span>Buy Interval</span><span>1m</span></div>
-            <div className="flex justify-between"><span>DEX Used</span><span>{selectedCluster.common_patterns.dex_programs.join(", ") || "None"}</span></div>
-            <div className="flex justify-between"><span>Token Mints</span><span>{selectedCluster.token_mints.join(", ") || "N/A"}</span></div>
-            <div className="flex justify-between"><span>Next Buy</span><span>0:51</span></div>
-          </div>
-        </div>
-
-        {/* Child Wallets Activity */}
-        <div className="bg-background p-4 rounded-lg shadow lg:col-span-1">
-          <h3 className="text-lg font-semibold mb-3">Child Wallets Activity</h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
-            {selectedCluster.recipients.map((addr, idx) => (
-              <div key={idx} className="flex justify-between border-b pb-2 last:border-b-0 text-sm">
-                <span>{addr.slice(0,4)}...{addr.slice(-3)}</span>
-                <span>{(Math.random() * 6 + 1).toFixed(1)} SOL</span>
-                <span className="text-muted-foreground">{idx+1} min ago</span>
+        <DialogContent className="bg-card rounded-lg p-6 max-w-6xl w-full h-[90vh] overflow-y-auto shadow-lg">
+          {selectedCluster && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Funding Overview */}
+              <div className="bg-background p-4 rounded-lg shadow">
+                <h3 className="text-lg font-semibold mb-3">Funding Overview</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between"><span>Total SOL Funded</span><span>{selectedCluster.total_sol_funded.toFixed(1)} SOL</span></div>
+                  <div className="flex justify-between"><span>SOL Remaining</span><span>{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span></div>
+                  <div className="flex justify-between"><span>SOL Spent</span><span>{(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL</span></div>
+                  <Progress
+                    value={((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100}
+                    className="w-full h-2"
+                  />
+                  <div className="flex justify-between text-sm text-muted-foreground">
+                    <span>{Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete</span>
+                    <span>Est. {formatTimeRemaining(selectedCluster.time_remaining_sec)}</span>
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Transaction Timeline */}
-        <div className="bg-background p-4 rounded-lg shadow lg:col-span-2">
-          <h3 className="text-lg font-semibold mb-3">Transaction Timeline</h3>
-          <div className="space-y-2 text-sm">
-            {getTransactionTimeline(selectedCluster.buy_slots).map((tx, idx) => (
-              <div key={idx} className="flex justify-between">
-                <span>Buy {tx.amount} {tx.token}</span>
-                <span className="text-muted-foreground">{tx.time}</span>
+              {/* Health Score */}
+              <div className="bg-background p-4 rounded-lg shadow flex flex-col items-center justify-center">
+                <h3 className="text-lg font-semibold mb-3">Health Score</h3>
+                <div className="relative w-28 h-28">
+                  <div className="absolute inset-0 rounded-full bg-gray-200"></div>
+                  <div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: `conic-gradient(#22c55e 0deg, #22c55e ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb ${calculateHealthScore(selectedCluster) * 3.6}deg, #e5e7eb 360deg)`,
+                    }}
+                  ></div>
+                  <div className="absolute inset-3 rounded-full bg-background flex items-center justify-center">
+                    <span className="font-bold text-2xl">{calculateHealthScore(selectedCluster)}</span>
+                  </div>
+                </div>
+                <span className="mt-2 text-sm text-muted-foreground">{getHealthLabel(calculateHealthScore(selectedCluster))}</span>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <Button
-          onClick={() => setSelectedCluster(null)}
-          className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded text-base block mx-auto mt-4 col-span-full"
-        >
-          Close
-        </Button>
-      </div>
-    )}
-  </DialogContent>
-</Dialog>
+              {/* Quick Stats */}
+              <div className="bg-background p-4 rounded-lg shadow">
+                <h3 className="text-lg font-semibold mb-3">Quick Stats</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between"><span>Active Wallets</span><span>{selectedCluster.children_count}/10</span></div>
+                  <div className="flex justify-between"><span>Buy Interval</span><span>1m</span></div>
+                  <div className="flex justify-between"><span>DEX Used</span><span>{selectedCluster.common_patterns.dex_programs.join(", ") || "None"}</span></div>
+                  <div className="flex justify-between"><span>Next Buy</span><span>0:51</span></div>
+                </div>
+              </div>
 
+              {/* Child Wallets Activity */}
+              <div className="bg-background p-4 rounded-lg shadow lg:col-span-1">
+                <h3 className="text-lg font-semibold mb-3">Child Wallets Activity</h3>
+                <div className="space-y-2">
+                  {getChildActivity(selectedCluster.recipients).map((child, idx) => (
+                    <div key={idx} className="flex justify-between border-b pb-2 last:border-b-0 text-sm">
+                      <span>{child.address.slice(0,4)}...{child.address.slice(-3)}</span>
+                      <span>{child.spent} SOL</span>
+                      <span className="text-muted-foreground">{child.lastTx}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Transaction Timeline */}
+              <div className="bg-background p-4 rounded-lg shadow lg:col-span-2">
+                <h3 className="text-lg font-semibold mb-3">Transaction Timeline</h3>
+                <div className="space-y-2 text-sm">
+                  {getTransactionTimeline(selectedCluster.buy_slots).map((tx, idx) => (
+                    <div key={idx} className="flex justify-between">
+                      <span>Buy {tx.amount} {tx.token}</span>
+                      <span className="text-muted-foreground">{tx.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Button
+                onClick={() => setSelectedCluster(null)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 px-4 py-2 rounded text-base block mx-auto mt-4 col-span-full"
+              >
+                Close
+              </Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
+
