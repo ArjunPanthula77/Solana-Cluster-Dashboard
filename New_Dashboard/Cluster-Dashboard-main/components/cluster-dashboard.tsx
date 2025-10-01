@@ -2956,9 +2956,12 @@
 //           )}
 //         </DialogContent>
 //       </Dialog>
-//     </div>
-//   )
-// }
+
+
+
+
+
+
 
 
 "use client"
@@ -3117,6 +3120,110 @@ export function ClusterDashboard() {
         return (aValue > bValue ? 1 : -1) * multiplier
       }) || []
 
+  const exportToCSV = () => {
+    if (!filteredAndSortedClusters.length) {
+      toast({
+        title: "No Data",
+        description: "No clusters to export",
+        variant: "destructive",
+      })
+      return
+    }
+    const headers = [
+      "Funding Wallet",
+      "Children Count",
+      "Total SOL Funded",
+      "Remaining SOL",
+      "Spend Rate (SOL/min)",
+      "Time Remaining (sec)",
+      "Status",
+      "Age (sec)",
+      "Token Mints",
+      "DEX Programs",
+    ]
+    const csvContent = [
+      headers.join(","),
+      ...filteredAndSortedClusters.map((cluster) =>
+        [
+          cluster.funding_wallet,
+          cluster.children_count,
+          cluster.total_sol_funded.toFixed(2),
+          cluster.total_sol_remaining.toFixed(2),
+          cluster.spend_rate_sol_per_min?.toFixed(2) ?? "N/A",
+          cluster.time_remaining_sec ?? "N/A",
+          cluster.status,
+          cluster.cluster_age_sec,
+          `"${cluster.token_mints.join(", ")}"`,
+          `"${cluster.common_patterns.dex_programs.join(", ")}"`,
+        ].join(",")
+      ),
+    ].join("\n")
+    const blob = new Blob([csvContent], { type: "text/csv" })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `solana-clusters-${new Date().toISOString().split("T")[0]}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+    toast({
+      title: "Export Complete",
+      description: "Cluster data exported to CSV",
+    })
+  }
+
+  const clearFilters = () => {
+    setSearchTerm("")
+    setStatusFilter("all")
+    setMinSolFilter("")
+    setMinChildrenFilter("")
+    setSortBy("total_sol_funded")
+    setSortOrder("desc")
+  }
+
+  const getStatusBadge = (status: string) => {
+    return status === "active" ? (
+      <Badge variant="default" className="bg-green-500 hover:bg-green-600">
+        {status.toUpperCase()}
+      </Badge>
+    ) : (
+      <Badge variant="secondary" className="bg-yellow-500 hover:bg-yellow-600 text-black">
+        {status.toUpperCase()}
+      </Badge>
+    )
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast({
+          title: "Copied!",
+          description: "Address copied to clipboard",
+        })
+      })
+      .catch((err) => {
+        console.error("Failed to copy:", err)
+        toast({
+          title: "Copy Failed",
+          description: "Unable to copy to clipboard",
+          variant: "destructive",
+        })
+      })
+  }
+
+  const summaryStats = {
+    totalClusters: filteredAndSortedClusters.length,
+    totalSolFunded: filteredAndSortedClusters.reduce((sum, cluster) => sum + cluster.total_sol_funded, 0),
+    totalSolRemaining: filteredAndSortedClusters.reduce((sum, cluster) => sum + cluster.total_sol_remaining, 0),
+    averageChildren:
+      filteredAndSortedClusters.length > 0
+        ? filteredAndSortedClusters.reduce((sum, cluster) => sum + cluster.children_count, 0) /
+          filteredAndSortedClusters.length
+        : 0,
+    activeClusters: filteredAndSortedClusters.filter((c) => c.status === "active").length,
+    formingClusters: filteredAndSortedClusters.filter((c) => c.status === "forming").length,
+  }
+
   const formatTimeRemaining = (seconds: number | null) => {
     if (seconds === null) return "N/A"
     const mins = Math.floor(seconds / 60)
@@ -3153,9 +3260,127 @@ export function ClusterDashboard() {
 
   return (
     <div className="max-w-6xl mx-auto p-5 bg-background rounded-lg shadow-lg space-y-5">
-      {/* header + filters (unchanged) ... */}
+      {/* Header + Filters */}
+      <header className="text-center mb-5">
+        <h1 className="text-primary text-2xl font-bold mb-2">Solana Funding Cluster Dashboard</h1>
+        <p className="text-muted-foreground text-base">
+          Real-time monitoring of active funding clusters (≥5 children, ≥20 SOL total, 10s window). Total Active:{" "}
+          <span className="text-green-500 font-semibold">{data?.metadata.total_active}</span> | Tracked:{" "}
+          <span className="text-blue-500 font-semibold">{data?.metadata.total_tracked}</span> | Last Updated:{" "}
+          <span className="font-semibold">
+            {lastUpdateTime?.toLocaleString() || new Date(data?.metadata.timestamp || "").toLocaleString()}
+          </span>
+        </p>
+        {error && <p className="text-destructive text-base mt-2">{error}</p>}
+      </header>
+      <div className="flex flex-col lg:flex-row justify-between mb-4 gap-2">
+        <Input
+          type="text"
+          placeholder="Search by Funding Wallet..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="flex-1 lg:w-1/2 p-2 text-base border border-border rounded"
+        />
+        <Select value={statusFilter} onValueChange={(value: "all" | "active" | "forming") => setStatusFilter(value)}>
+          <SelectTrigger className="lg:w-1/4 p-2 text-base border border-border rounded bg-background">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="active">Active Only</SelectItem>
+            <SelectItem value="forming">Forming Only</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="flex gap-2">
+          <Button
+            onClick={startPolling}
+            disabled={isPolling}
+            className={`w-32 p-2 text-base rounded cursor-pointer transition-colors ${
+              isPolling ? "bg-muted hover:bg-muted/80 text-foreground" : "bg-green-500 text-white hover:bg-green-600"
+            } ${isPolling ? "" : "hover:brightness-85"}`}
+          >
+            Start Polling
+          </Button>
+          <Button
+            onClick={stopPolling}
+            disabled={!isPolling}
+            className={`w-32 p-2 text-base rounded cursor-pointer transition-colors ${
+              !isPolling ? "bg-muted hover:bg-muted/80 text-foreground" : "bg-red-500 text-white hover:bg-red-600"
+            } ${!isPolling ? "" : "hover:brightness-85"}`}
+          >
+            Stop Polling
+          </Button>
+        </div>
+      </div>
 
-      {/* Table (unchanged) ... */}
+      {/* Table */}
+      <div className="overflow-x-auto">
+        <Table className="w-full border-collapse bg-card rounded-lg overflow-hidden shadow-sm">
+          <TableHeader>
+            <TableRow className="bg-primary text-primary-foreground">
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Funding Wallet</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Children</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Total Funded SOL</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Remaining SOL</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Spend Rate (SOL/min)</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Time Remaining (sec)</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Token Mints</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">DEX Programs</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Fan Out Slot</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Status</TableHead>
+              <TableHead className="p-3 text-left font-bold text-sm text-primary-foreground">Age (sec)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredAndSortedClusters.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={11} className="text-center text-muted-foreground p-5">
+                  No clusters match your filters
+                </TableCell>
+              </TableRow>
+            ) : (
+              filteredAndSortedClusters.map((cluster, index) => (
+                <TableRow key={index} className="hover:bg-muted/30 transition-colors border-b border-border">
+                  <TableCell className="p-3 text-left text-sm">{cluster.funding_wallet}</TableCell>
+                  <TableCell className="p-3 text-left text-sm">
+                    <div className="flex items-center gap-2">
+                      <span>{cluster.children_count}</span>
+                      <Button
+                        size="sm"
+                        onClick={() => setSelectedCluster(cluster)}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 px-2 py-1 rounded text-xs transition-colors"
+                      >
+                        View Details
+                      </Button>
+                    </div>
+                  </TableCell>
+                  <TableCell className="p-3 text-left text-sm">{cluster.total_sol_funded.toFixed(2)}</TableCell>
+                  <TableCell
+                    className={`p-3 text-left text-sm font-semibold ${
+                      cluster.total_sol_remaining < 1 ? "text-destructive" : ""
+                    }`}
+                  >
+                    {cluster.total_sol_remaining.toFixed(2)}
+                  </TableCell>
+                  <TableCell className="p-3 text-left text-sm">
+                    {cluster.spend_rate_sol_per_min?.toFixed(2) ?? "N/A"}
+                  </TableCell>
+                  <TableCell className="p-3 text-left text-sm">{cluster.time_remaining_sec ?? "N/A"}</TableCell>
+                  <TableCell className="p-3 text-left text-sm">{cluster.token_mints.join(", ") || "None"}</TableCell>
+                  <TableCell className="p-3 text-left text-sm">
+                    {cluster.common_patterns.dex_programs.join(", ") || "None"}
+                  </TableCell>
+                  <TableCell className="p-3 text-left text-sm">{cluster.fan_out_slot}</TableCell>
+                  <TableCell className="p-3 text-left text-sm">
+                    {getStatusBadge(cluster.status)}
+                  </TableCell>
+                  <TableCell className="p-3 text-left text-sm">{cluster.cluster_age_sec}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Updated Detail Modal */}
       <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
@@ -3166,15 +3391,26 @@ export function ClusterDashboard() {
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-3">Funding Overview</h3>
                 <div className="space-y-2">
-                  <div className="flex justify-between"><span>Total SOL Funded</span><span>{selectedCluster.total_sol_funded.toFixed(1)} SOL</span></div>
-                  <div className="flex justify-between"><span>SOL Remaining</span><span>{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span></div>
-                  <div className="flex justify-between"><span>SOL Spent</span><span>{(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL</span></div>
+                  <div className="flex justify-between">
+                    <span>Total SOL Funded</span>
+                    <span>{selectedCluster.total_sol_funded.toFixed(1)} SOL</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>SOL Remaining</span>
+                    <span>{selectedCluster.total_sol_remaining.toFixed(1)} SOL</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>SOL Spent</span>
+                    <span>{(selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining).toFixed(1)} SOL</span>
+                  </div>
                   <Progress
                     value={((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100}
                     className="w-full h-2"
                   />
                   <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>{Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete</span>
+                    <span>
+                      {Math.round(((selectedCluster.total_sol_funded - selectedCluster.total_sol_remaining) / selectedCluster.total_sol_funded) * 100)}% Complete
+                    </span>
                     <span>Est. {formatTimeRemaining(selectedCluster.time_remaining_sec)}</span>
                   </div>
                 </div>
@@ -3202,10 +3438,22 @@ export function ClusterDashboard() {
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-3">Quick Stats</h3>
                 <div className="space-y-2 text-sm">
-                  <div className="flex justify-between"><span>Active Wallets</span><span>{selectedCluster.children_count}/10</span></div>
-                  <div className="flex justify-between"><span>Buy Interval</span><span>1m</span></div>
-                  <div className="flex justify-between"><span>DEX Used</span><span>{selectedCluster.common_patterns.dex_programs.join(", ") || "None"}</span></div>
-                  <div className="flex justify-between"><span>Next Buy</span><span>0:51</span></div>
+                  <div className="flex justify-between">
+                    <span>Active Wallets</span>
+                    <span>{selectedCluster.children_count}/10</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Buy Interval</span>
+                    <span>1m</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>DEX Used</span>
+                    <span>{selectedCluster.common_patterns.dex_programs.join(", ") || "None"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Next Buy</span>
+                    <span>0:51</span>
+                  </div>
                 </div>
               </div>
 
@@ -3215,7 +3463,7 @@ export function ClusterDashboard() {
                 <div className="space-y-2">
                   {getChildActivity(selectedCluster.recipients).map((child, idx) => (
                     <div key={idx} className="flex justify-between border-b pb-2 last:border-b-0 text-sm">
-                      <span>{child.address.slice(0,4)}...{child.address.slice(-3)}</span>
+                      <span>{child.address.slice(0, 4)}...{child.address.slice(-3)}</span>
                       <span>{child.spent} SOL</span>
                       <span className="text-muted-foreground">{child.lastTx}</span>
                     </div>
@@ -3249,4 +3497,5 @@ export function ClusterDashboard() {
     </div>
   )
 }
+
 
