@@ -2316,6 +2316,7 @@
 //   )
 // }
 
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -2774,9 +2775,9 @@ export function ClusterDashboard() {
       </div>
 
       <Dialog open={!!selectedCluster} onOpenChange={() => setSelectedCluster(null)}>
-        <DialogContent className="bg-card rounded-lg p-6 max-w-7xl w-full h-[85vh] overflow-hidden shadow-lg">
+        <DialogContent className="bg-card rounded-lg p-6 max-w-8xl w-full h-[90vh] overflow-hidden shadow-lg">
           {selectedCluster && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 h-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
               {/* Funding Overview */}
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-2">Funding Overview</h3>
@@ -2829,7 +2830,7 @@ export function ClusterDashboard() {
                 </div>
               </div>
 
-              {/* Spend Rate and Time Remaining */}
+              {/* Metrics (Spend Rate and Time Remaining) */}
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-2">Metrics</h3>
                 <div className="space-y-2">
@@ -2844,7 +2845,7 @@ export function ClusterDashboard() {
                 </div>
               </div>
 
-              {/* Token Mints and DEX Programs */}
+              {/* Token Details (Token Mints and DEX Programs) */}
               <div className="bg-background p-4 rounded-lg shadow">
                 <h3 className="text-lg font-semibold mb-2">Token Details</h3>
                 <div className="space-y-2">
@@ -2860,9 +2861,9 @@ export function ClusterDashboard() {
               </div>
 
               {/* All Child Wallets */}
-              <div className="bg-background p-4 rounded-lg shadow row-span-2">
+              <div className="bg-background p-4 rounded-lg shadow lg:col-span-1">
                 <h3 className="text-lg font-semibold mb-2">All Child Wallets</h3>
-                <div className="space-y-2 max-h-[200px] overflow-y-auto">
+                <div className="space-y-2 max-h-[250px] overflow-y-auto">
                   {selectedCluster.recipients.map((address, idx) => (
                     <div key={idx} className="flex justify-between items-center border-b pb-2 last:border-b-0">
                       <span className="flex-1 mr-4">{address.slice(0, 4)}...{address.slice(-3)}</span>
@@ -2879,7 +2880,7 @@ export function ClusterDashboard() {
               </div>
 
               {/* Transaction Timeline */}
-              <div className="bg-background p-4 rounded-lg shadow">
+              <div className="bg-background p-4 rounded-lg shadow lg:col-span-2">
                 <h3 className="text-lg font-semibold mb-2">Transaction Timeline</h3>
                 <div className="space-y-2">
                   {getTransactionTimeline(selectedCluster.buy_slots).map((tx, idx) => (
