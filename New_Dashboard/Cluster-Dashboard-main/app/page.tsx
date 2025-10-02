@@ -328,12 +328,9 @@
 //   )
 // }
 
-
-
 "use client"
 
-import type React from "react"
-
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -350,16 +347,27 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react"
-import { useState } from "react"
 
 export default function HomePage() {
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null)
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
+  const [isClient, setIsClient] = useState(false)
+
+  // Defer state-dependent rendering until client-side
+  useEffect(() => {
+    // Simulate auth check (replace with actual auth logic)
+    const checkAuth = async () => {
+      const loggedIn = false // Replace with real auth check
+      setIsLoggedIn(loggedIn)
+    }
+    checkAuth()
+    setIsClient(true) // Mark as client-side to allow state rendering
+  }, [])
 
   const handleDashboardClick = (e: React.MouseEvent) => {
-    if (!isLoggedIn) {
+    if (isLoggedIn === false) {
       e.preventDefault()
       alert("Please log in to access the dashboard.")
       router.push("/#login")
@@ -404,6 +412,18 @@ export default function HomePage() {
     },
   ]
 
+  // Render a placeholder until client-side hydration is complete
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation setIsLoggedInState={() => {}} />
+        <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8 text-center">
+          <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -419,8 +439,7 @@ export default function HomePage() {
                   Track the smart money movements. <span className="text-primary">Position</span> before price impact.
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-lg text-pretty">
-                  Real-time blockchain analysis covering all aspects of smart money behavior in a consistent and
-                  reliable format.
+                  Real-time blockchain analysis covering all aspects of smart money behavior in a consistent and reliable format.
                 </p>
               </div>
 
@@ -450,8 +469,9 @@ export default function HomePage() {
                   <Button
                     size="lg"
                     className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-base font-medium w-full sm:w-auto"
+                    disabled={isLoggedIn === null}
                   >
-                    Stop Missing Out
+                    {isLoggedIn === null ? "Loading..." : "Stop Missing Out"}
                   </Button>
                 </Link>
                 <div className="flex items-center space-x-2 text-sm text-muted-foreground">
@@ -592,12 +612,15 @@ export default function HomePage() {
 
           <div className="text-center space-y-4">
             <p className="text-sm text-muted-foreground text-pretty">
-              These opportunities happen every week. The difference between profit and regret is having the right tools
-              to spot them early.
+              These opportunities happen every week. The difference between profit and regret is having the right tools to spot them early.
             </p>
             <Link href="/dashboard" onClick={handleDashboardClick}>
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">
-                Start Tracking Smart Money Now
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
+                disabled={isLoggedIn === null}
+              >
+                {isLoggedIn === null ? "Loading..." : "Start Tracking Smart Money Now"}
               </Button>
             </Link>
           </div>
