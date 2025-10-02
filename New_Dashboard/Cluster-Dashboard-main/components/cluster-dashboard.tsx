@@ -762,7 +762,6 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
 
 
 
-
 export function ClusterDashboard() {
   const [data, setData] = useState<ApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
