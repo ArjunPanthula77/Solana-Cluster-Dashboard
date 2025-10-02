@@ -617,6 +617,15 @@ interface ApiResponse {
 
 
 
+
+
+
+
+
+
+
+
+
 function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => void }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -661,7 +670,7 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
           </div>
           
           <div className="p-6 space-y-4">
-            {/* Funding Overview - now full width */}
+            {/* Funding Overview - now true full width */}
             <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
               <h3 className="text-lg font-semibold mb-2 text-foreground">Funding Overview</h3>
               <div className="flex justify-between mb-1 text-foreground">
@@ -683,47 +692,50 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
               <div className="text-sm text-muted-foreground">Est. {estTime}</div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
-              <h3 className="text-lg font-semibold mb-2 text-foreground">Quick Stats</h3>
-              <div className="grid grid-cols-2 gap-2 text-sm text-foreground">
-                <div>Active Wallets</div>
-                <div className="font-bold">
-                  <div className="flex items-center justify-between">
-                    <span>{activeCount} / {cluster.children_count}</span>
-                    <button onClick={() => setDialogOpen(true)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">View</button>
+            {/* Quick Stats + Child Wallets side by side on desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Quick Stats */}
+              <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Quick Stats</h3>
+                <div className="grid grid-cols-2 gap-2 text-sm text-foreground">
+                  <div>Active Wallets</div>
+                  <div className="font-bold">
+                    <div className="flex items-center justify-between">
+                      <span>{activeCount} / {cluster.children_count}</span>
+                      <button onClick={() => setDialogOpen(true)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">View</button>
+                    </div>
                   </div>
+                  <div>Token mint</div>
+                  <div className="font-bold">
+                    {tokenMintsToShow.length > 0 ? (
+                      tokenMintsToShow.map((mint, i) => (
+                        <div key={i} className="flex items-center mb-2 justify-between">
+                          <span className="font-mono">{mint.slice(0, 3) + "..." + mint.slice(-3)}</span>
+                          <button onClick={() => copyToClipboard(mint)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">Copy</button>
+                        </div>
+                      ))
+                    ) : (
+                      'N/A'
+                    )}
+                  </div>
+                  <div>DEX Used</div>
+                  <div className="font-bold">{dexUsed}</div>
                 </div>
-                <div>Token mint</div>
-                <div className="font-bold">
-                  {tokenMintsToShow.length > 0 ? (
-                    tokenMintsToShow.map((mint, i) => (
-                      <div key={i} className="flex items-center mb-2 justify-between">
-                        <span className="font-mono">{mint.slice(0, 3) + "..." + mint.slice(-3)}</span>
-                        <button onClick={() => copyToClipboard(mint)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">Copy</button>
-                      </div>
-                    ))
-                  ) : (
-                    'N/A'
-                  )}
-                </div>
-                <div>DEX Used</div>
-                <div className="font-bold">{dexUsed}</div>
               </div>
-            </div>
 
-            {/* Child Wallets */}
-            <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
-              <h3 className="text-lg font-semibold mb-2 text-foreground">Child Wallets Activity</h3>
-              {childrenToShow.map((addr, i) => {
-                const abbr = addr.slice(0, 3) + "..." + addr.slice(-3);
-                return (
-                  <div key={i} className="flex items-center mb-2 justify-between text-foreground">
-                    <div className="font-mono">{abbr}</div>
-                    <button onClick={() => copyToClipboard(addr)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">Copy</button>
-                  </div>
-                );
-              })}
+              {/* Child Wallets */}
+              <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Child Wallets Activity</h3>
+                {childrenToShow.map((addr, i) => {
+                  const abbr = addr.slice(0, 3) + "..." + addr.slice(-3);
+                  return (
+                    <div key={i} className="flex items-center mb-2 justify-between text-foreground">
+                      <div className="font-mono">{abbr}</div>
+                      <button onClick={() => copyToClipboard(addr)} className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-xs hover:bg-primary/90">Copy</button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -758,6 +770,17 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
     </>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
