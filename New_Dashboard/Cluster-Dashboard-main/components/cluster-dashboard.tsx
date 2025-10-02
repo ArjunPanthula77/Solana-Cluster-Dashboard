@@ -631,8 +631,6 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
   const estMin = cluster.time_remaining_sec !== null ? Math.floor(cluster.time_remaining_sec / 60) : 0;
   const estSec = cluster.time_remaining_sec !== null ? cluster.time_remaining_sec % 60 : 0;
   const estTime = cluster.time_remaining_sec !== null ? `${estMin}m ${estSec}s remaining` : 'N/A';
-  const healthScore = Math.round(100 - (percentComplete / 5));
-  const healthLabel = healthScore > 80 ? 'Excellent Health' : healthScore > 60 ? 'Good Health' : 'Poor Health';
   const activeCount = cluster.children_count;
   const dexUsed = cluster.common_patterns.dex_programs.join(' / ') || 'N/A';
 
@@ -661,37 +659,29 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
           </div>
           
           <div className="p-6 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="rounded-lg bg-muted/30 p-4 shadow max-w-md border border-border">
-                <h3 className="text-lg font-semibold mb-2 text-foreground">Funding Overview</h3>
-                <div className="flex justify-between mb-1 text-foreground">
-                  <span>Total SOL Funded</span>
-                  <span className="font-bold">{funded.toFixed(1)} SOL</span>
-                </div>
-                <div className="flex justify-between mb-1 text-foreground">
-                  <span>SOL Spent</span>
-                  <span className="font-bold">{spent.toFixed(1)} SOL</span>
-                </div>
-                <div className="flex justify-between mb-2 text-foreground">
-                  <span>SOL Remaining</span>
-                  <span className="font-bold text-yellow-500">{remaining.toFixed(1)} SOL</span>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2 mb-1">
-                  <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${percentComplete}%` }}></div>
-                </div>
-                <div className="text-sm text-muted-foreground mb-1">{Math.round(percentComplete)}% Complete</div>
-                <div className="text-sm text-muted-foreground">Est. {estTime}</div>
+            {/* Funding Overview */}
+            <div className="rounded-lg bg-muted/30 p-4 shadow max-w-md border border-border">
+              <h3 className="text-lg font-semibold mb-2 text-foreground">Funding Overview</h3>
+              <div className="flex justify-between mb-1 text-foreground">
+                <span>Total SOL Funded</span>
+                <span className="font-bold">{funded.toFixed(1)} SOL</span>
               </div>
-              <div className="rounded-lg bg-muted/30 p-4 shadow max-w-xs border border-border">
-                <h3 className="text-lg font-semibold mb-2 text-foreground">Health of the clusters</h3>
-                <div className="flex justify-center mb-2">
-                  <div className="rounded-full bg-green-500 w-16 h-16 flex items-center justify-center text-white text-2xl font-bold border-4 border-green-600">
-                    {healthScore}
-                  </div>
-                </div>
-                <div className="text-center text-green-500 font-semibold">{healthLabel}</div>
+              <div className="flex justify-between mb-1 text-foreground">
+                <span>SOL Spent</span>
+                <span className="font-bold">{spent.toFixed(1)} SOL</span>
               </div>
+              <div className="flex justify-between mb-2 text-foreground">
+                <span>SOL Remaining</span>
+                <span className="font-bold text-yellow-500">{remaining.toFixed(1)} SOL</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2 mb-1">
+                <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${percentComplete}%` }}></div>
+              </div>
+              <div className="text-sm text-muted-foreground mb-1">{Math.round(percentComplete)}% Complete</div>
+              <div className="text-sm text-muted-foreground">Est. {estTime}</div>
             </div>
+
+            {/* Quick Stats */}
             <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
               <h3 className="text-lg font-semibold mb-2 text-foreground">Quick Stats</h3>
               <div className="grid grid-cols-2 gap-2 text-sm text-foreground">
@@ -719,6 +709,8 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
                 <div className="font-bold">{dexUsed}</div>
               </div>
             </div>
+
+            {/* Child Wallets */}
             <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
               <h3 className="text-lg font-semibold mb-2 text-foreground">Child Wallets Activity</h3>
               {childrenToShow.map((addr, i) => {
