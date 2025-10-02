@@ -683,7 +683,7 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
                 <div className="text-sm text-muted-foreground">Est. {estTime}</div>
               </div>
               <div className="rounded-lg bg-muted/30 p-4 shadow max-w-xs border border-border">
-                <h3 className="text-lg font-semibold mb-2 text-foreground"></h3>
+                <h3 className="text-lg font-semibold mb-2 text-foreground">Health of the clusters</h3>
                 <div className="flex justify-center mb-2">
                   <div className="rounded-full bg-green-500 w-16 h-16 flex items-center justify-center text-white text-2xl font-bold border-4 border-green-600">
                     {healthScore}
