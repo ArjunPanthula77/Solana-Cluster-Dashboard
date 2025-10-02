@@ -615,6 +615,8 @@ interface ApiResponse {
   }
 }
 
+
+
 function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => void }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -659,8 +661,8 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
           </div>
           
           <div className="p-6 space-y-4">
-            {/* Funding Overview */}
-            <div className="rounded-lg bg-muted/30 p-4 shadow max-w-md border border-border">
+            {/* Funding Overview - now full width */}
+            <div className="rounded-lg bg-muted/30 p-4 shadow w-full border border-border">
               <h3 className="text-lg font-semibold mb-2 text-foreground">Funding Overview</h3>
               <div className="flex justify-between mb-1 text-foreground">
                 <span>Total SOL Funded</span>
@@ -756,6 +758,10 @@ function ClusterDetail({ cluster, onClose }: { cluster: Cluster, onClose: () => 
     </>
   );
 }
+
+
+
+
 
 export function ClusterDashboard() {
   const [data, setData] = useState<ApiResponse | null>(null)
