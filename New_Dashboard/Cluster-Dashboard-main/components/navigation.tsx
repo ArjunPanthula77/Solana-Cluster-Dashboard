@@ -634,16 +634,13 @@
 
 
 
-
-
-
 "use client"
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Home, Menu, X, LogIn, LogOut, UserPlus } from "lucide-react"
+import { Home, Menu, X, LogIn, LogOut, UserPlus, BarChart3 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { cn } from "@/lib/utils"
 
@@ -678,9 +675,20 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       // Fallback to API check if no localStorage data
       const checkSession = async () => {
         try {
-          const res = await fetch("https://solana-cluster-dashboard-production-cce9.up.railway.app/me", {
+          // Try GET first, fallback to POST if GET returns 405
+          let res = await fetch("https://solana-cluster-dashboard-production-cce9.up.railway.app/me", {
+            method: "GET",
             credentials: "include",
           })
+          
+          // If GET returns 405, try POST
+          if (res.status === 405) {
+            res = await fetch("https://solana-cluster-dashboard-production-cce9.up.railway.app/me", {
+              method: "POST",
+              credentials: "include",
+            })
+          }
+          
           const loggedIn = res.ok
           setIsLoggedIn(loggedIn)
           if (setIsLoggedInState) setIsLoggedInState(loggedIn) // Only call if prop exists
@@ -689,7 +697,8 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
           } else {
             localStorage.removeItem("isLoggedIn")
           }
-        } catch {
+        } catch (error) {
+          console.error("Session check error:", error)
           setIsLoggedIn(false)
           if (setIsLoggedInState) setIsLoggedInState(false) // Only call if prop exists
           localStorage.removeItem("isLoggedIn")
@@ -700,10 +709,14 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
   }, [setIsLoggedInState])
 
   const handleLogout = async () => {
-    await fetch("https://solana-cluster-dashboard-production-cce9.up.railway.app/logout", {
-      method: "POST",
-      credentials: "include",
-    })
+    try {
+      await fetch("https://solana-cluster-dashboard-production-cce9.up.railway.app/logout", {
+        method: "POST",
+        credentials: "include",
+      })
+    } catch (error) {
+      console.error("Logout error:", error)
+    }
     setIsLoggedIn(false)
     if (setIsLoggedInState) setIsLoggedInState(false) // Only call if prop exists
     localStorage.removeItem("isLoggedIn")
@@ -751,13 +764,13 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       })
       const data = await res.json()
       if (res.ok) {
-        setMessage(`✅ Signed up as ${data.user.email || data.user.solana_address}`)
+        setMessage(`✅ Signed up as ${data.user?.email || data.user?.solana_address}`)
         setIsLoggedIn(true)
         if (setIsLoggedInState) setIsLoggedInState(true) // Only call if prop exists
         localStorage.setItem("isLoggedIn", "true")
         setMode(null)
       } else {
-        setMessage(`❌ ${data.error}`)
+        setMessage(`❌ ${data.error || 'Signup failed'}`)
       }
     } catch {
       setMessage("❌ Error connecting to backend")
@@ -784,13 +797,13 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
       })
       const data = await res.json()
       if (res.ok) {
-        setMessage(`✅ Logged in as ${data.user.email || data.user.solana_address}`)
+        setMessage(`✅ Logged in as ${data.user?.email || data.user?.solana_address}`)
         setIsLoggedIn(true)
         if (setIsLoggedInState) setIsLoggedInState(true) // Only call if prop exists
         localStorage.setItem("isLoggedIn", "true")
         setMode(null)
       } else {
-        setMessage(`❌ ${data.error}`)
+        setMessage(`❌ ${data.error || 'Login failed'}`)
       }
     } catch {
       setMessage("❌ Error connecting to backend")
@@ -841,6 +854,11 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
 
               {isLoggedIn ? (
                 <div className="flex items-center space-x-4">
+                  <Link href="/dashboard">
+                    <Button variant="default" size="sm">
+                      Open App
+                    </Button>
+                  </Link>
                   <Button onClick={handleLogout} variant="ghost" size="sm" className="flex items-center space-x-2">
                     <LogOut className="h-4 w-4" />
                     <span>Logout</span>
@@ -875,13 +893,17 @@ export function Navigation({ setIsLoggedInState }: { setIsLoggedInState?: (isLog
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-border bg-background">
             <div className="px-4 py-4 space-y-4">
-              {navItems.map((item) => (
-                <Link key={item.name} href={item.href} onClick={item.onClick}>
-                  <div className="block text-sm text-muted-foreground hover:text-foreground transition-colors py-2">
-                    {item.name}
-                  </div>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link key={item.name} href={item.href} onClick={item.onClick}>
+                    <div className="flex items-center space-x-2 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      {Icon && <Icon className="h-4 w-4" />}
+                      <span>{item.name}</span>
+                    </div>
+                  </Link>
+                )
+              })}
               {!isLoggedIn && (
                 <div className="space-y-2 pt-4 border-t border-border">
                   <Button onClick={() => setMode("login")} variant="ghost" size="sm" className="w-full justify-start flex items-center space-x-2">
