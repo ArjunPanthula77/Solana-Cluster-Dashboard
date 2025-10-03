@@ -375,7 +375,7 @@ export default function HomePage() {
               <div className="aspect-square bg-muted/50 rounded-xl flex items-center justify-center">
                 {/* <div className="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm">MEW</div> */}
 
-                <img src="/Screenshot from 2025-10-03 16-09-28.png" alt="Custom Image" className="w-16 h-16 rounded-full object-cover" />
+                <img src="./image.png" alt="Custom Image" className="w-16 h-16 rounded-full object-cover" />
 
                 
               </div>
