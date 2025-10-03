@@ -254,111 +254,116 @@ export default function HomePage() {
       </section>
 
       {/* Advanced Trading Intelligence features section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground text-balance">
-              Advanced Trading Intelligence
-            </h2>
-            <p className="text-lg text-muted-foreground text-pretty">
-              Get the insights you need to make informed trading decisions on Solana
-            </p>
-          </div>
+          {/* Advanced Trading Intelligence features section */}
+<section className="py-20 px-4 sm:px-6 lg:px-8">
+  <div className="max-w-7xl mx-auto space-y-12">
+    <div className="text-center space-y-4">
+      <h2 className="text-3xl sm:text-4xl font-bold text-foreground text-balance">
+        Advanced Trading Intelligence
+      </h2>
+      <p className="text-lg text-muted-foreground text-pretty">
+        Get the insights you need to make informed trading decisions on Solana
+      </p>
+    </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Real-time Monitoring */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none">
-              <Activity className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Real-time Monitoring</h3>
-                <p className="text-muted-foreground text-sm">
-                  Track funding clusters as they form and evolve in real-time
-                </p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Live cluster detection</li>
-                <li>• 5-second polling intervals</li>
-                <li>• Instant status updates</li>
-              </ul>
-            </div>
-
-            {/* Pattern Analysis */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-              <TrendingUp className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Pattern Analysis</h3>
-                <p className="text-muted-foreground text-sm">Identify common trading patterns and wallet behaviors</p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• DEX program tracking</li>
-                <li>• Wallet age analysis</li>
-                <li>• Amount pattern detection</li>
-              </ul>
-            </div>
-
-            {/* Risk Assessment */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-              <Shield className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Risk Assessment</h3>
-                <p className="text-muted-foreground text-sm">
-                  Monitor spend rates and remaining balances for risk management
-                </p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• SOL spend rate tracking</li>
-                <li>• Time remaining estimates</li>
-                <li>• Low balance alerts</li>
-              </ul>
-            </div>
-
-            {/* Fast Detection */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-              <Zap className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Fast Detection</h3>
-                <p className="text-muted-foreground text-sm">
-                  Detect activities within 10-second windows with high precision
-                </p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Minimum 5 children required</li>
-                <li>• 20+ SOL threshold</li>
-                <li>• 10-second detection window</li>
-              </ul>
-            </div>
-
-            {/* Child Wallet Tracking */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-              <Users className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Child Wallet Tracking</h3>
-                <p className="text-muted-foreground text-sm">View and analyze all child wallets within each cluster</p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Complete recipient lists</li>
-                <li>• One-click address copying</li>
-                <li>• Cluster relationship mapping</li>
-              </ul>
-            </div>
-
-            {/* Advanced Filtering */}
-            <div className="bg-card rounded-xl p-6 border border-border space-y-4">
-              <BarChart className="h-10 w-10 text-foreground" />
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-foreground">Advanced Filtering</h3>
-                <p className="text-muted-foreground text-sm">Filter and search clusters by multiple criteria</p>
-              </div>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>• Status-based filtering</li>
-                <li>• Wallet address search</li>
-                <li>• Custom time ranges</li>
-              </ul>
-            </div>
-          </div>
+    {/* Features Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Real-time Monitoring */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <Activity className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Real-time Monitoring</h3>
+          <p className="text-muted-foreground text-sm">
+            Track funding clusters as they form and evolve in real-time
+          </p>
         </div>
-      </section>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• Live cluster detection</li>
+          <li>• 5-second polling intervals</li>
+          <li>• Instant status updates</li>
+        </ul>
+      </div>
+
+      {/* Pattern Analysis */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <TrendingUp className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Pattern Analysis</h3>
+          <p className="text-muted-foreground text-sm">Identify common trading patterns and wallet behaviors</p>
+        </div>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• DEX program tracking</li>
+          <li>• Wallet age analysis</li>
+          <li>• Amount pattern detection</li>
+        </ul>
+      </div>
+
+      {/* Risk Assessment */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <Shield className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Risk Assessment</h3>
+          <p className="text-muted-foreground text-sm">
+            Monitor spend rates and remaining balances for risk management
+          </p>
+        </div>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• SOL spend rate tracking</li>
+          <li>• Time remaining estimates</li>
+          <li>• Low balance alerts</li>
+        </ul>
+      </div>
+
+      {/* Fast Detection */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <Zap className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Fast Detection</h3>
+          <p className="text-muted-foreground text-sm">
+            Detect activities within 10-second windows with high precision
+          </p>
+        </div>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• Minimum 5 children required</li>
+          <li>• 20+ SOL threshold</li>
+          <li>• 10-second detection window</li>
+        </ul>
+      </div>
+
+      {/* Child Wallet Tracking */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <Users className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Child Wallet Tracking</h3>
+          <p className="text-muted-foreground text-sm">View and analyze all child wallets within each cluster</p>
+        </div>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• Complete recipient lists</li>
+          <li>• One-click address copying</li>
+          <li>• Cluster relationship mapping</li>
+        </ul>
+      </div>
+
+      {/* Advanced Filtering */}
+      <div className="bg-card rounded-xl p-6 border border-border space-y-4 shadow-none hover:shadow-lg transition-shadow duration-300">
+        <BarChart className="h-10 w-10 text-foreground" />
+        <div className="space-y-2">
+          <h3 className="text-xl font-bold text-foreground">Advanced Filtering</h3>
+          <p className="text-muted-foreground text-sm">Filter and search clusters by multiple criteria</p>
+        </div>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>• Status-based filtering</li>
+          <li>• Wallet address search</li>
+          <li>• Custom time ranges</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+     
+
+      
 
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
         <div className="max-w-6xl mx-auto text-center space-y-16">
