@@ -373,7 +373,11 @@ export default function HomePage() {
             {/* Discover Card */}
             <div className="bg-card rounded-2xl p-8 border border-border space-y-6">
               <div className="aspect-square bg-muted/50 rounded-xl flex items-center justify-center">
-                <div className="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm">MEW</div>
+                {/* <div className="bg-red-500 text-white px-4 py-2 rounded-full font-bold text-sm">MEW</div> */}
+
+                <img src="https://drive.google.com/file/d/1P5uI24KMzgpVySrshqsydYID_bhJRW04/view?usp=sharing" alt="Custom Image" className="w-16 h-16 rounded-full object-cover" />
+
+                
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-bold text-foreground">Ultra-fast wallet clustering</h3>
