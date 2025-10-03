@@ -1163,44 +1163,33 @@ export default function HomePage() {
       router.push("/#login")
     }
   }
-
-  const faqs = [
+const faqs = [
     {
       question: "What is Opsonchain?",
       answer:
-        "Opsonchain is a real-time blockchain monitoring platform that helps advanced traders track smart money movements, analyze wallet behaviors, and stay ahead of market trends.",
+        "Opsonchain is a real-time Solana on-chain monitoring platform that detects real-time cluster detection and trading patterns.",
     },
     {
       question: "How does Opsonchain work?",
       answer:
-        "Our platform monitors blockchain transactions in real-time, identifying patterns and behaviors of successful traders and institutional investors, giving you insights before price movements occur.",
+        "It tracks parent-to-child wallet fundings, bundles, and token activity to give traders early insights.",
     },
     {
       question: "What features does Opsonchain offer?",
       answer:
-        "We offer smart money tracking, wallet analysis, trend detection, copy trading features, and comprehensive analytics tools for blockchain monitoring.",
+        "Live bundler detection, token load analysis, exit signals, and trading opportunity alerts.",
     },
     {
       question: "Is Opsonchain suitable for beginners?",
       answer:
-        "While our platform is designed for advanced traders, we provide comprehensive documentation and support to help users of all levels understand and utilize our tools effectively.",
-    },
-    {
-      question: "What subscription plans are available?",
-      answer:
-        "We offer three tiers: Free (basic features), PRO ($67/month), and Legend ($667/month) with advanced features and priority support.",
-    },
-    {
-      question: "How do I cancel my membership?",
-      answer:
-        "You can cancel your subscription at any time from your account settings. All cancellations are processed immediately with access continuing until the end of your billing period.",
+        "Yes, it provides clear insights with simple dashboards designed for all experience levels.",
     },
     {
       question: "What makes Opsonchain different?",
       answer:
-        "Our real-time analysis, comprehensive database coverage, and advanced pattern recognition algorithms set us apart from other blockchain monitoring tools.",
+        "It’s the first Solana on-chain tool offering ultra-fast wallet cluster detection with actionable trading windows.",
     },
-  ]
+]
 
   return (
     <div className="min-h-screen bg-background">
