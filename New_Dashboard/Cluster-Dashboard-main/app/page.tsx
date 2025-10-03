@@ -3887,7 +3887,7 @@ export default function HomePage() {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
                 <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Opsonchain
+                 OpsOnChain
                 </span>
               </div>
               <p className="text-sm text-muted-foreground max-w-md">
@@ -3905,7 +3905,7 @@ export default function HomePage() {
                     Home
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     href="/dashboard"
                     onClick={handleDashboardClick}
@@ -3913,7 +3913,7 @@ export default function HomePage() {
                   >
                     Dashboard
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link href="#" className="hover:text-primary transition-colors">
                     About Us
