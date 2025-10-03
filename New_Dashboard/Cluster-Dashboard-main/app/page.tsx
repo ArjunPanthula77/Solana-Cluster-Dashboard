@@ -3875,7 +3875,7 @@ export default function HomePage() {
             >
               Join Now
             </Button>
-            <p className="text-sm text-muted-foreground">👉 Join the early access waitlist</p>
+         
           </div>
         </div>
       </section>
