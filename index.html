@@ -1,38 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Coming Soon</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background-color: #000;
-    }
-
-    img {
-      position: fixed;
-      top: 0.1px;                  /* 🔥 small top margin */
-      left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      width: 100vw;
-      height: calc(100vh - 5px); /* 🔥 adjust height for that margin */
-      object-fit: cover;
-      object-position: center top; /* keeps top area visible */
-      display: block;
-      background-color: #000;
-    }
-=======
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpsOnChain – Raw Volatility</title>
@@ -48,7 +17,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
     body { font-family: 'Inter', sans-serif; }
->>>>>>> 907c4c6 (trying design)
   </style>
 </head>
 <body class="bg-black text-white overflow-hidden">
@@ -229,7 +197,7 @@
           @keyframes move-grid{0%{background-position:0 0,0 0}100%{background-position:400px 400px,-400px 400px}}
 
           @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
-          .animate-ticker{animation:ticker 12s linear infinite}
+          .animate-ticker{animation:ticker 30s linear infinite}
 
           .chart-line-1{opacity:0;animation:slideFromLeft 8s ease-in-out infinite}
           @keyframes slideFromLeft{
@@ -274,3 +242,6 @@
 </script>
 </body>
 </html>
+
+
+
