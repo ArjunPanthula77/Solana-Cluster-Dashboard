@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpsOnChain – Raw Volatility</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-black text-white overflow-hidden">
+
+<div id="root"></div>
+
+<script type="text/babel">
+  const { useState } = React;
+
+  function App() {
+    const [email, setEmail] = useState("");
+    const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async e => {
+      e.preventDefault();
+      setLoading(true);
+      await new Promise(r => setTimeout(r, 800));
+      setSubmitted(true);
+      setEmail("");
+      setLoading(false);
+      setTimeout(() => setSubmitted(false), 3000);
+    };
+
+    return (
+      <main className="min-h-screen flex items-center justify-center px-4 relative">
+
+        {/* Background Grid */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="animated-grid"></div>
+        </div>
+
+        {/* FOUR PURE VOLATILITY CHARTS */}
+        <div className="absolute inset-0 z-1 pointer-events-none">
+
+          {/* CHART 1: Fast Pump → Crash → Recover */}
+          <svg className="absolute top-[12%] left-0 w-full h-[210px] chart-line-1"
+               viewBox="0 0 1200 210" preserveAspectRatio="none">
+            <polyline
+              points="0,180 80,160 160,100 240,170 320,130 400,80 480,140 560,90 640,150 720,70 800,130 880,60 960,110 1040,50 1120,100 1200,70"
+              fill="none"
+              stroke="rgba(34,197,94,0.3)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          {/* CHART 2: Bearish Choppy Dump */}
+          <svg className="absolute top-[38%] right-0 w-full h-[190px] chart-line-2"
+               viewBox="0 0 1200 190" preserveAspectRatio="none">
+            <polyline
+              points="1200,60 1120,80 1040,70 960,110 880,90 800,140 720,110 640,160 560,130 480,170 400,140 320,180 240,150 160,170 80,130 0,150"
+              fill="none"
+              stroke="rgba(239,68,68,0.3)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          {/* CHART 3: Sideways Chop → Breakout */}
+          <svg className="absolute top-[62%] left-0 w-full h-[160px] chart-line-3"
+               viewBox="0 0 1200 160" preserveAspectRatio="none">
+            <polyline
+              points="0,110 100,105 200,115 300,100 400,120 500,95 600,115 700,90 800,110 900,85 1000,105 1100,80 1200,100"
+              fill="none"
+              stroke="rgba(251,191,36,0.3)"
+              strokeWidth="1.5"
+              strokeDasharray="8,4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+
+          {/* CHART 4: Moon → Dump → Rebound */}
+          <svg className="absolute bottom-[8%] right-0 w-full h-[170px] chart-line-4"
+               viewBox="0 0 1200 170" preserveAspectRatio="none">
+            <polyline
+              points="1200,140 1100,135 1000,150 900,120 800,160 700,100 600,70 500,110 400,80 300,130 200,90 100,140 0,100"
+              fill="none"
+              stroke="rgba(99,102,241,0.3)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+
+        {/* Notifications */}
+        <div className="absolute top-[20%] right-[5%] z-10 trade-notification">
+          <div className="bg-black/60 backdrop-blur-sm border border-green-500/30 px-4 py-2 text-xs">
+            <div className="text-green-400 font-bold">BUY EXECUTED</div>
+            <div className="text-gray-400">SOL/USDC • $142.35</div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-[25%] left-[8%] z-10 trade-notification" style={{animationDelay:'2s'}}>
+          <div className="bg-black/60 backdrop-blur-sm border border-red-500/30 px-4 py-2 text-xs">
+            <div className="text-red-400 font-bold">SELL EXECUTED</div>
+            <div className="text-gray-400">BTC/USDT • $52.8K</div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="relative z-20 text-center max-w-3xl mx-auto">
+          <div className="mb-10 flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 398.47 311.8"
+                 width="80" height="80" className="drop-shadow-[0_0_10px_rgba(239,68,68,0.7)]">
+              <linearGradient id="solanaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ff3030"/>
+                <stop offset="100%" stopColor="#b00000"/>
+              </linearGradient>
+              <path fill="url(#solanaGradient)"
+                    d="M64.14 237.39a9.2 9.2 0 0 1 6.52-2.7h325.82c2.82 0 4.23 3.41 2.23 5.41l-63.63 63.63a9.2 9.2 0 0 1-6.52 2.7H2.74c-2.82 0-4.23-3.41-2.23-5.41l63.63-63.63zM64.14 143.91a9.2 9.2 0 0 1 6.52-2.7h325.82c2.82 0 4.23 3.41 2.23 5.41l-63.63 63.63a9.2 9.2 0 0 1-6.52 2.7H2.74c-2.82 0-4.23-3.41-2.23-5.41l63.63-63.63zM64.14 50.44a9.2 9.2 0 0 1 6.52-2.7h325.82c2.82 0 4.23 3.41 2.23 5.41L335.08 116.8a9.2 9.2 0 0 1-6.52 2.7H2.74c-2.82 0-4.23-3.41-2.23-5.41L64.14 50.44z"/>
+            </svg>
+          </div>
+
+          <h1 className="text-7xl md:text-8xl font-black text-red-500 mb-4 tracking-tighter"
+              style={{textShadow:"0 0 25px rgba(239,68,68,0.4)"}}>
+            OpsOnChain
+          </h1>
+          <div className="h-[2px] w-40 bg-gradient-to-r from-red-600 via-red-500 to-transparent mx-auto mb-6"/>
+
+          <p className="text-2xl md:text-3xl text-gray-200 mb-2 font-light tracking-wide">
+            The First VWAP Execution Layer on Solana
+          </p>
+          <p className="text-lg md:text-xl text-red-500 mb-8 font-semibold">
+            Smarter Trades for Bigger Players
+          </p>
+
+          <div className="overflow-hidden relative h-6 mb-8">
+            <div className="absolute animate-ticker whitespace-nowrap text-sm text-gray-400">
+              <span className="mx-6 text-red-500 font-semibold">BTC/USDT up 2.5%</span>
+              <span className="mx-6 text-red-500 font-semibold">SOL/USDC up 1.8%</span>
+              <span className="mx-6 text-red-500 font-semibold">ETH/USDT down 0.4%</span>
+              <span className="mx-6 text-red-500 font-semibold">BONK/USDC up 3.2%</span>
+              <span className="mx-6 text-red-500 font-semibold">JTO/USDT up 4.1%</span>
+              <span className="mx-6 text-red-500 font-semibold">USDT Flow: $12.8M</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center gap-10 text-sm text-gray-400 mb-12">
+            <div><span className="text-red-500 font-bold">First</span> VWAP on Solana</div>
+            <div><span className="text-red-500 font-bold">Institutional</span> Grade Execution</div>
+            <div><span className="text-red-500 font-bold">MEV</span> Protected</div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input type="email" placeholder="Enter your email" value={email}
+                   onChange={e=>setEmail(e.target.value)} required
+                   className="flex-1 px-6 py-4 bg-black border border-red-600 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-red-600 font-light"
+                   disabled={loading}/>
+            <button type="submit" disabled={loading}
+                    className="px-8 py-4 bg-red-600 text-white font-bold uppercase tracking-wider hover:bg-red-700 transition-all duration-300 disabled:opacity-50">
+              {loading?"Joining...":"Join Waitlist"}
+            </button>
+          </form>
+
+          {submitted && <p className="text-red-400 text-sm font-semibold tracking-wide mt-3">
+            Welcome to the future. Check your email.
+          </p>}
+
+          <p className="text-xs text-gray-500 mt-16 tracking-widest uppercase">
+            Building the future of trading on Solana
+          </p>
+        </div>
+
+        {/* ANIMATIONS */}
+        <style>{`
+          .animated-grid::before{
+            content:"";position:absolute;inset:0;
+            background-image:linear-gradient(135deg,rgba(255,40,40,.08) 1px,transparent 1px),
+                             linear-gradient(-135deg,rgba(255,40,40,.08) 1px,transparent 1px);
+            background-size:40px 40px;animation:move-grid 25s linear infinite;
+            opacity:.25;mix-blend-mode:screen;
+          }
+          @keyframes move-grid{0%{background-position:0 0,0 0}100%{background-position:400px 400px,-400px 400px}}
+
+          @keyframes ticker{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+          .animate-ticker{animation:ticker 30s linear infinite}
+
+          .chart-line-1{opacity:0;animation:slideFromLeft 8s ease-in-out infinite}
+          @keyframes slideFromLeft{
+            0%{opacity:0;transform:translateX(-100%)}15%{opacity:1;transform:translateX(0)}
+            85%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(100%)}
+          }
+
+          .chart-line-2{opacity:0;animation:slideFromRight 10s ease-in-out infinite 1s}
+          @keyframes slideFromRight{
+            0%{opacity:0;transform:translateX(100%)}15%{opacity:1;transform:translateX(0)}
+            85%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-100%)}
+          }
+
+          .chart-line-3{opacity:0;animation:fadeInOut 12s ease-in-out infinite 2s}
+          @keyframes fadeInOut{
+            0%{opacity:0;transform:translateY(20px)}20%{opacity:1;transform:translateY(0)}
+            80%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-20px)}
+          }
+
+          .chart-line-4{opacity:0;animation:slideDiagonal 9s ease-in-out infinite 3s}
+          @keyframes slideDiagonal{
+            0%{opacity:0;transform:translate(50%,30%)}20%{opacity:1;transform:translate(0,0)}
+            80%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(-50%,-30%)}
+          }
+
+          .trade-notification{animation:floatNotification 6s ease-in-out infinite}
+          @keyframes floatNotification{
+            0%{opacity:0;transform:translateY(20px) scale(.8)}20%{opacity:1;transform:translateY(0) scale(1)}
+            80%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-20px) scale(.8)}
+          }
+
+          svg polyline{
+            filter:drop-shadow(0 0 2px currentColor);
+          }
+        `}</style>
+      </main>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<App />);
+</script>
+</body>
+</html>
