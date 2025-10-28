@@ -20,14 +20,14 @@
 
     img {
       position: fixed;
-      top: 0;
+      top: 5px;                  /* 🔥 small top margin */
       left: 0;
       min-width: 100%;
       min-height: 100%;
       width: 100vw;
-      height: 100vh;
+      height: calc(100vh - 5px); /* 🔥 adjust height for that margin */
       object-fit: cover;
-      object-position: center center;
+      object-position: center top; /* keeps top area visible */
       display: block;
       background-color: #000;
     }
