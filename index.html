@@ -15,13 +15,12 @@
 
     img {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      transform: translate(-50%, -50%);
-      object-fit: cover;         /* fills the whole screen */
-      object-position: center;   /* keeps the focus perfectly centered */
+      object-fit: contain;      /* ✅ show full image */
+      background-color: #000;   /* keeps background black around it */
       display: block;
     }
   </style>
